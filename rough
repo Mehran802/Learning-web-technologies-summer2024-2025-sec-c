@@ -1,40 +1,109 @@
 <html>
-    <head>
-        <title>Task 2.1</title>
-    </head>
-    <body>
-        <form id="myForm">
-            <label>Name:</label><br>
-            <input type="text" id="name"><br>
-            <span id="error" style="color:red"></span><br>
-            <input type="submit"><br>
-        </form>
+<head>
+    <title>Login Page</title>
+</head>
+<body>
+    <h1>Login Page</h1>
+    <form method="post" action="abc.html" enctype="multipart/form-data" onsubmit="return loginCheck()">
+        <fieldset>
+        Username: <input type="text" name="username" value="" id="username" onblur="checkUsername()" >
+        <p id="uError"></p>
+        Password: <input type="password" name="password" value="" id="password" onblur="checkPassword()" >
+        <p id="pError"></p>
+        <input type="submit" value="Submit">
+        <p id="success"></p>
+        </fieldset>
+    </form>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                let form = document.getElementById('myForm');
-                let nameInput = document.getElementById('name');
-                let errorSpan = document.getElementById('error');
+    <script>
+        let name = "alamin";
+        let cgpa = 4.00;
+        let id = 1234;
+        let std = [1, 'alamin', 3.5, 'alamin@aiub.edu'];
+        let email = std[3];
 
-                form.addEventListener('submit', function (e) {
-                    e.preventDefault(); // Prevent form submission
+        function abc(a=0, b=0){
+            return a+b;
+        }
+        abc();
 
-                    let nameValue = nameInput.value.trim();
-                    let nameRegex = /^[a-zA-Z][a-zA-Z.\- ]*$/;
+        let f1 = function(a, b){
+            return a+b;
+        }
+        f1();
 
-                    if (nameValue === "") {
-                        errorSpan.innerText = "Name cannot be empty";
-                    } else if (nameValue.split(" ").length < 2) {
-                        errorSpan.innerText = "Name must contain at least two words";
-                    } else if (!nameRegex.test(nameValue)) {
-                        errorSpan.innerText = "Name can only contain letters, dot(.) or dash(-) and must start with a letter";
-                    } else {
-                        errorSpan.innerText = "";
-                        alert("Form submitted successfully!");
-                        form.submit(); // Now submit the form
-                    }
-                });
-            });
-        </script>
-    </body>
+        let f2 = (a,b)=>a+b;
+
+        for(let a=0; a<10; a++){ }
+
+        let username = "";
+        let password = "";
+        let uError = document.getElementById('uError');
+        let pError = document.getElementById('pError');
+
+        function checkUsername(){
+            username = document.getElementById('username').value;
+
+            if(username == ""){
+                uError.innerHTML = "please type username first!";
+                uError.style.color = 'red';
+            }
+            else if(username.trim().split(" ").length < 2){
+                uError.innerHTML = "username must contain at least 2 words!";
+                uError.style.color = 'red';
+            }
+            else if(!username.match(/^[a-zA-Z]/)){
+                uError.innerHTML = "username must start with a letter!";
+                uError.style.color = 'red';
+            }
+            else if(!username.match(/^[a-zA-Z.\-\s]+$/)){
+                uError.innerHTML = "only letters, dot(.) or dash(-) allowed!";
+                uError.style.color = 'red';
+            }
+            else{
+                uError.innerHTML = "";
+            }
+        }
+
+        function checkPassword(){
+            password = document.getElementById('password').value;
+            if(password == ""){
+                pError.innerHTML = "please type password first!";
+                pError.style.color = 'red';
+            }else{
+                pError.innerHTML = "";
+            }
+        }
+
+        function loginCheck(){
+            if(username != "" && password != ""){
+                if(username == password){
+                    alert('valid user!');
+                    return true;
+                }else{
+                    let successMsg = document.getElementById('success');
+                    successMsg.innerHTML = "please type valid username or password!";
+                    successMsg.style.color = 'red';
+                    return false;
+                }
+            }else{
+                checkPassword();
+                checkUsername();
+                return false;
+            }
+        }
+
+        function change(){
+            let username = document.getElementById('username').value;
+            if(username == ""){
+                document.getElementById('msg').innerHTML = "please type username first!";
+                document.getElementById('msg').style.color = 'red';
+            }else{
+                let head = document.getElementsByTagName('h1')[0];
+                head.innerHTML = username;
+                document.getElementById('msg').innerHTML = "";
+            }
+        }
+    </script>
+</body>
 </html>
