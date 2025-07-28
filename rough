@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>Task 2.1</title>
+    </head>
+    <body>
+        <form id="myForm">
+            <label>Name:</label><br>
+            <input type="text" id="name"><br>
+            <span id="error" style="color:red"></span><br>
+            <input type="submit"><br>
+        </form>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                let form = document.getElementById('myForm');
+                let nameInput = document.getElementById('name');
+                let errorSpan = document.getElementById('error');
+
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault(); // Prevent form submission
+
+                    let nameValue = nameInput.value.trim();
+                    let nameRegex = /^[a-zA-Z][a-zA-Z.\- ]*$/;
+
+                    if (nameValue === "") {
+                        errorSpan.innerText = "Name cannot be empty";
+                    } else if (nameValue.split(" ").length < 2) {
+                        errorSpan.innerText = "Name must contain at least two words";
+                    } else if (!nameRegex.test(nameValue)) {
+                        errorSpan.innerText = "Name can only contain letters, dot(.) or dash(-) and must start with a letter";
+                    } else {
+                        errorSpan.innerText = "";
+                        alert("Form submitted successfully!");
+                        form.submit(); // Now submit the form
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
