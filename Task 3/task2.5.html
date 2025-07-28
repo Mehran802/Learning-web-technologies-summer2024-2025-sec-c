@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <title>Task 2.5</title>
+</head>
+ 
+<body>
+    <form action="abc.html" method="post" onsubmit="return degreeCheck()">
+        <table>
+            <tr>
+                <fieldset>
+                    <legend>Degree</legend>
+                    <input type="checkbox"name ="gen" id="SSC">
+                    <label for="Degree">SSC</label>
+                    <input type="checkbox" name ="gen" id="HSC">
+                    <label for="Degree">HSC</label>
+                    <input type="checkbox" name ="gen" id="BSc">
+                    <label for="Degree">BSc</label>
+                    <p id="degreeErr"></p>
+                </fieldset>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit">
+                </td>
+            </tr>
+        </table>
+    </form>
+     <script>
+    function degreeCheck() {
+            let SSC = document.getElementById('SSC');
+            let HSC = document.getElementById('HSC');
+            let BSc = document.getElementById('BSc');
+            let degreeErr = document.getElementById("degreeErr");
+            if (!SSC.checked && !HSC.checked && !BSc.checked) {
+                degreeErr.innerHTML = "Please select a degree"
+                degreeErr.style.color = 'red';
+                return false
+            }
+            else {
+                degreeErr.innerHTML = "";
+            }
+ 
+        }
+   </script>
+</body>
+ 
+</html>
+ 

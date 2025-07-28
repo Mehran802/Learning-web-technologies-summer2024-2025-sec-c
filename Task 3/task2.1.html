@@ -1,0 +1,73 @@
+<html> 
+<head>
+    <title>Task 2.1</title>
+</head>
+ 
+<body>
+    <form action="" onsubmit="return nameCheck()">
+        <table>
+            <tr>
+                <td>Name</td>
+            </tr>
+            <tr>
+                <td>
+                    <input id="name" type="text">
+                    <p id="nameErr"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit">
+                </td>
+            </tr>
+        </table>
+    </form>
+    <script>
+        function charCheck(name) {
+            for (let i = 0; i < name.length; i++) {
+                const element = name[i];
+                console.log(element);
+                if (!((element >= 'A' && element <= 'Z')
+                    || (element >= 'a' && element <= 'z')
+                    || element == '.' || element == '-')) {
+                        return false;
+                    }
+            }
+            return true;
+        }
+ 
+        function nameCheck() {
+            let name = document.getElementById('name').value.trim();
+            let nameErr = document.getElementById("nameErr");
+            if (name == "") {
+                nameErr.innerHTML = "Name cannot be empty"
+                nameErr.style.color = 'red';
+                return false
+            }
+ 
+            else if (name.length < 2) {
+                nameErr.innerHTML = "Name must contain at least two words"
+                nameErr.style.color = 'red';
+                return false
+            }
+            else if (name[0] >= 0 || name[0] <= 9) {
+                nameErr.innerHTML = "Name cannot start with number";
+                nameErr.style.color = 'red';
+                return false
+            }
+            else if (!charCheck(name)) {
+                nameErr.innerHTML = "Name can contain 'A-Z' or 'a-z' or '-' or '.'";
+                nameErr.style.color = 'red';
+                return false
+            }
+            else {
+                nameErr.innerHTML = "";
+            }
+ 
+        }
+ 
+ 
+    </script>
+</body>
+ 
+</html>

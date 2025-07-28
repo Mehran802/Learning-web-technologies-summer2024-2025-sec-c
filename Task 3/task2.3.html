@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <title>Task 2.3</title>
+</head>
+ 
+<body>
+    <form action="abc.html" method="post" onsubmit="return genderCheck()">
+        <table>
+            <tr>
+                <fieldset>
+                    <legend>Gender</legend>
+                    <input type="radio" id="male" name ="gen">
+                    <label for="gender">Male</label>
+                    <input type="radio" id="female" name ="gen">
+                    <label for="gender">Female</label>
+                    <input type="radio" id="other" name ="gen">
+                    <label for="gender">Other</label>
+                </fieldset>
+                     <p id="genderErr"></p>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit">
+                </td>
+            </tr>
+        </table>
+    </form>
+   <script>
+    function genderCheck() {
+            let male = document.getElementById('male');
+            let female = document.getElementById('female');
+            let other = document.getElementById('other');
+            let genderErr = document.getElementById("genderErr");
+            if (!male.checked && !female.checked && !other.checked) {
+                genderErr.innerHTML = "Please select a gender"
+                genderErr.style.color = 'red';
+                return false
+            }
+            else {
+                genderErr.innerHTML = "";
+            }
+ 
+        }
+   </script>
+</body>
+ 
+</html>
