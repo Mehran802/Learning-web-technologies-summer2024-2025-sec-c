@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Calculator</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  max-width: 300px;
+  margin: 30px auto;
+  text-align: center;
+}
+.calculator {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 20px;
+}
+.display {
+  grid-column: 1 / -1;
+  background: silver;
+  font-size: 2rem;
+  padding: 10px;
+  text-align: right;
+  user-select: none;
+  color: black;
+  border-radius: 5px;
+}
+.btn {
+  padding: 15px;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  user-select: none;
+  background: #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btn.operator { background: #f38c32; color: #fff; }
+.btn.clear { background: silver; }
+.btn.equal { background: #4caf50; color: #fff; }
+.btn.zero { grid-column: span 2; }
+.btn:active { transform: scale(0.95);
+ }
+  </style>
+</head>
+<body>
+
+  <h2>Hi there. Myself Calculator. your mathmetics assistant. feel free to calculate</h2>
+
+  <div class="calculator">
+    <div id="display" class="display">0</div>
+  </div>
+
+  <script>
+    const calculator = document.querySelector('.calculator');
+    const display = document.getElementById('display');
+
+    const buttons = [
+      { text: 'C', className: 'clear', onClick: clearDisplay },
+      { text: '%', className: 'operator', onClick: () => press('%') },
+      { text: '÷', className: 'operator', onClick: () => press('/') },
+      { text: '×', className: 'operator', onClick: () => press('*') },
+
+      { text: '7', onClick: () => press('7') },
+      { text: '8', onClick: () => press('8') },
+      { text: '9', onClick: () => press('9') },
+      { text: '−', className: 'operator', onClick: () => press('-') },
+
+      { text: '4', onClick: () => press('4') },
+      { text: '5', onClick: () => press('5') },
+      { text: '6', onClick: () => press('6') },
+      { text: '+', className: 'operator', onClick: () => press('+') },
+
+      { text: '1', onClick: () => press('1') },
+      { text: '2', onClick: () => press('2') },
+      { text: '3', onClick: () => press('3') },
+      { text: '=', className: 'equal', onClick: calculate },
+
+      { text: '0', className: 'zero', onClick: () => press('0') },
+      { text: '.', onClick: () => press('.') }
+    ];
+
+    function createButtons() {
+      buttons.forEach(btn => {
+        const div = document.createElement('div');
+        div.textContent = btn.text;
+        div.classList.add('btn');
+        if (btn.className) div.classList.add(btn.className);
+        div.tabIndex = 0;
+        div.addEventListener('click', btn.onClick);
+        div.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            btn.onClick();
+          }
+        });
+        calculator.appendChild(div);
+      });
+    }
+
+    createButtons();
+
+    function press(val) {
+      if (val === '%') {
+        applyPercentage();
+        return;
+      }
+
+      if (display.innerText === '0' || display.innerText === 'Error') {
+        if (['+', '*', '/', '%'].includes(val)) return;
+        display.innerText = val;
+      } else {
+        display.innerText += val;
+      }
+    }
+
+    function clearDisplay() {
+      display.innerText = '0';
+    }
+
+    function calculate() {
+      try {
+        let expr = display.innerText.replace(/÷/g, '/').replace(/×/g, '*');
+
+        let operator = null;
+        let operators = ['+', '-', '*', '/', '%'];
+        for (let op of operators) {
+          if (expr.includes(op)) {
+            operator = op;
+            break;
+          }
+        }
+
+        if (!operator) {
+          display.innerText = expr;
+          return;
+        }
+
+        let parts = expr.split(operator);
+        if (parts.length !== 2) {
+          display.innerText = 'Error';
+          return;
+        }
+
+        let num1 = parseFloat(parts[0]);
+        let num2 = parseFloat(parts[1]);
+        let result;
+
+        switch (operator) {
+          case '+':
+            result = num1 + num2;
+            break;
+          case '-':
+            result = num1 - num2;
+            break;
+          case '*':
+            result = num1 * num2;
+            break;
+          case '/':
+            if (num2 === 0) {
+              display.innerText = 'Error';
+              return;
+            }
+            result = num1 / num2;
+            break;
+          case '%':
+            result = num1 % num2;
+            break;
+          default:
+            display.innerText = 'Error';
+            return;
+        }
+
+        display.innerText = result.toString();
+
+      } catch (e) {
+        display.innerText = 'Error';
+      }
+    }
+
+    function applyPercentage() {
+      let expr = display.innerText;
+      let match = expr.match(/(\d+\.?\d*)$/);
+
+      if (match) {
+        let number = match[0];
+        let percentValue = parseFloat(number) / 100;
+        display.innerText = expr.slice(0, -number.length) + percentValue;
+      }
+    }
+  </script>
+
+</body>
+</html>
