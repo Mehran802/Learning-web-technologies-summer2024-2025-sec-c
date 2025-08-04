@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Registration Form - Banking System</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f7f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .reg-container {
+    background: white;
+    width: 400px;
+    padding: 30px 35px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+  }
+  label {
+    display: block;
+    margin: 12px 0 6px;
+    font-weight: bold;
+  }
+  input[type="text"], input[type="email"], input[type="password"], textarea, input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 60px;
+  }
+  .error {
+    color: red;
+    font-size: 13px;
+    margin-top: 4px;
+    display: none;
+  }
+  button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: #0077cc;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #005fa3;
+  }
+  #imagePreview {
+    display: block;
+    margin: 10px auto;
+    max-width: 120px;
+    max-height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #0077cc;
+  }
+</style>
+</head>
+<body>
+
+<div class="reg-container">
+  <h2>Register</h2>
+  <form id="regForm" novalidate>
+    <label for="fullName">Full Name</label>
+    <input type="text" id="fullName" placeholder="Enter your full name" />
+    <div class="error" id="nameError">Please enter a valid full name (letters and spaces only).</div>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" placeholder="Enter your email" />
+    <div class="error" id="emailError">Please enter a valid email.</div>
+
+    <label for="phone">Phone Number</label>
+    <input type="text" id="phone" placeholder="Enter your phone number" />
+    <div class="error" id="phoneError">Please enter a valid phone number (10-15 digits).</div>
+
+    <label for="nid">NID Number</label>
+    <input type="text" id="nid" placeholder="Enter your NID number" />
+    <div class="error" id="nidError">Please enter a valid NID number (at least 8 digits).</div>
+
+    <label for="address">Address</label>
+    <textarea id="address" placeholder="Enter your address"></textarea>
+    <div class="error" id="addressError">Please enter your address.</div>
+
+    <label for="profilePic">Profile Picture</label>
+    <input type="file" id="profilePic" accept="image/*" />
+    <img id="imagePreview" src="" alt="Profile Preview" style="display:none;" />
+    <div class="error" id="profilePicError">Please upload a valid image file (max 2MB).</div>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="Enter your password" />
+    <div class="error" id="passwordError">Password must be at least 6 characters.</div>
+
+    <label for="confirmPassword">Confirm Password</label>
+    <input type="password" id="confirmPassword" placeholder="Confirm your password" />
+    <div class="error" id="confirmPasswordError">Passwords do not match.</div>
+
+    <button type="submit">Register</button>
+  </form>
+</div>
+
+<script>
+  const regForm = document.getElementById('regForm');
+  const profilePic = document.getElementById('profilePic');
+  const imagePreview = document.getElementById('imagePreview');
+  const profilePicError = document.getElementById('profilePicError');
+
+  function validateName(name) {
+    if (name.length === 0) return false;
+    for (let i = 0; i < name.length; i++) {
+      let code = name.charCodeAt(i);
+      if (!(code === 32 || (code >= 65 && code <= 90) || (code >= 97 && code <= 122))) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function validateEmail(email) {
+    if (email.length < 5) return false;
+    for (let i = 0; i < email.length; i++) {
+      let c = email.charCodeAt(i);
+      if (c < 32 || c > 126) return false;
+    }
+    let at = email.indexOf('@');
+    if (at < 1) return false;
+    let dot = email.indexOf('.', at);
+    if (dot <= at + 1) return false;
+    if (email.includes(' ')) return false;
+    return true;
+  }
+
+  function validatePhone(phone) {
+    if (phone.length < 10 || phone.length > 15) return false;
+    for (let i = 0; i < phone.length; i++) {
+      let c = phone.charCodeAt(i);
+      if (c < 48 || c > 57) return false;
+    }
+    return true;
+  }
+
+  function validateNID(nid) {
+    if (nid.length < 8) return false;
+    for (let i = 0; i < nid.length; i++) {
+      let c = nid.charCodeAt(i);
+      if (c < 48 || c > 57) return false;
+    }
+    return true;
+  }
+
+  profilePic.addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        profilePicError.textContent = 'Please upload a valid image file.';
+        profilePicError.style.display = 'block';
+        imagePreview.style.display = 'none';
+        this.value = '';
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        profilePicError.textContent = 'Image size must be less than 2MB.';
+        profilePicError.style.display = 'block';
+        imagePreview.style.display = 'none';
+        this.value = '';
+        return;
+      }
+      profilePicError.style.display = 'none';
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        imagePreview.src = e.target.result;
+        imagePreview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    } else {
+      imagePreview.style.display = 'none';
+      profilePicError.style.display = 'none';
+    }
+  });
+
+  regForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const fullName = document.getElementById('fullName');
+    const email = document.getElementById('email');
+    const phone = document.getElementById('phone');
+    const nid = document.getElementById('nid');
+    const address = document.getElementById('address');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+
+    const nameError = document.getElementById('nameError');
+    const emailError = document.getElementById('emailError');
+    const phoneError = document.getElementById('phoneError');
+    const nidError = document.getElementById('nidError');
+    const addressError = document.getElementById('addressError');
+    const passwordError = document.getElementById('passwordError');
+    const confirmPasswordError = document.getElementById('confirmPasswordError');
+
+    let valid = true;
+
+    if (fullName.value.trim() === '' || !validateName(fullName.value.trim())) {
+      nameError.textContent = 'Please enter a valid full name (letters and spaces only).';
+      nameError.style.display = 'block';
+      valid = false;
+    } else {
+      nameError.style.display = 'none';
+    }
+
+    if (!validateEmail(email.value.trim())) {
+      emailError.style.display = 'block';
+      valid = false;
+    } else {
+      emailError.style.display = 'none';
+    }
+
+    if (!validatePhone(phone.value.trim())) {
+      phoneError.style.display = 'block';
+      valid = false;
+    } else {
+      phoneError.style.display = 'none';
+    }
+
+    if (!validateNID(nid.value.trim())) {
+      nidError.style.display = 'block';
+      valid = false;
+    } else {
+      nidError.style.display = 'none';
+    }
+
+    if (address.value.trim() === '') {
+      addressError.style.display = 'block';
+      valid = false;
+    } else {
+      addressError.style.display = 'none';
+    }
+
+    if (!profilePic.files[0]) {
+      profilePicError.textContent = 'Please upload a profile picture.';
+      profilePicError.style.display = 'block';
+      valid = false;
+    } else {
+      profilePicError.style.display = 'none';
+    }
+
+    if (password.value.trim().length < 6) {
+      passwordError.style.display = 'block';
+      valid = false;
+    } else {
+      passwordError.style.display = 'none';
+    }
+
+    if (password.value.trim() !== confirmPassword.value.trim()) {
+      confirmPasswordError.style.display = 'block';
+      valid = false;
+    } else {
+      confirmPasswordError.style.display = 'none';
+    }
+
+    if (valid) {
+      alert('Registration successful!');
+      regForm.reset();
+      imagePreview.style.display = 'none';
+    }
+  });
+</script>
+
+</body>
+</html>
